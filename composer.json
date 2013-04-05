@@ -1,0 +1,17 @@
+{
+    "name": "n98/gitosis-admin-bundle",
+    "description": "Bundle to manage gitosis users, repositories and keys",
+    "require": {
+        "n98/gitosis": "dev-master"
+    },
+    "require-dev": {
+        "symfony/framework-bundle": ">=2.1.0,<2.3-dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Münch",
+            "email": "c.muench@netz98.de"
+        }
+    ]
+}
