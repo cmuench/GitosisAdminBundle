@@ -1,0 +1,84 @@
+{% extends "N98GitosisAdminBundle:Layout:page.html.twig" %}
+{% import "N98GitosisAdminBundle:Layout:formatting_macros.html.twig" as format_macros %}
+
+{% block content %}
+    <h2>{{ 'Group'|trans }}: {{ group.name }}</h2>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="btn-toolbar pull-right">
+                <div class="btn-group">
+                    <a href="#delete_group_dialog" class="btn" role="button" data-toggle="modal"><i class="icon-trash"></i> {{ 'Delete'|trans }}</a>
+                    <a href="{{ url('group_edit', { group: group.name}) }}" class="btn"><i class="icon-edit"></i> {{ 'Edit'|trans }}</a>
+                    <a href="{{ url('group_users', { group: group.name}) }}" class="btn"><i class="icon-user"></i> {{ 'Users'|trans }}</a>
+                    <a href="{{ url('group_writable', { group: group.name}) }}" class="btn"><i class="icon-book"></i> {{ 'Writable Repositories'|trans }}</a>
+                    <a href="{{ url('group_readonly', { group: group.name}) }}" class="btn"><i class="icon-book"></i> {{ 'Readonly Repositories'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Repositories</h3>
+    <div class="row-fluid">
+        <div class="span6">
+            <table class="table table-hover">
+                <caption><strong>{{ 'Writable Repositories'|trans }}</strong></caption>
+                {% for writable_repo in group.writable %}
+                <tr>
+                    <td><a href="{{ url('repository_view', { repo: writable_repo}) }}"><i class="icon-book"></i> {{ writable_repo }}</a></td>
+                </tr>
+                {% else %}
+                    <tr>
+                        <td>
+                            <span class="alert alert-info">{{ 'No repository assigned'|trans }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="span6">
+            <table class="table table-hover">
+                <caption><strong>{{ 'Readonly Repositories'|trans }}</strong></caption>
+                {% for readonly_repo in group.readonly%}
+                    <tr>
+                        <td><a href="{{ url('repository_view', { repo: readonly_repo}) }}"><i class="icon-book"></i> {{ readonly_repo }}</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>
+                            <span class="alert alert-info">{{ 'No repository assigned'|trans }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <h3>Users</h3>
+
+    <ul class="nav nav-tabs nav-stacked">
+        {% for user in group.members %}
+            <li>
+                <a href="{{ url('user_view', {user:user}) }}"><i class="icon-black icon-user"></i>  {{ format_macros.username(user) }}</a>
+            </li>
+        {% else %}
+            <span class="label info">No user assigned</span>
+        {% endfor %}
+    </ul>
+
+    <!-- Delete group dialog -->
+    <div id="delete_group_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteGroupDialog" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="deleteGroupDialog">Delete Group</h3>
+        </div>
+        <div class="modal-body">
+            <p>Do you really want to delete the user group: <strong>{{ group.name }}</strong>?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <a href="{{ url('group_delete', { group: group.name}) }}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "N98GitosisAdminBundle:Layout:page.html.twig" %}
+{% import "N98GitosisAdminBundle:Layout:formatting_macros.html.twig" as format_macros %}
+
+{% block content %}
+    <h2>{{ 'Repository'|trans }}: {{ repository.name }}</h2>
+
+    <div class="btn-toolbar pull-right">
+        <div class="btn-group">
+            <a href="#delete_repository_dialog" class="btn" role="button" data-toggle="modal"><i class="icon-trash"></i> Delete</a>
+            <a href="{{ url('repository_edit', { repo: repository.name}) }}" class="btn"><i class="icon-edit"></i> Edit</a>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>{{ 'Owner'|trans }}:</th>
+                <td>{% if repository.owner %}{{ repository.owner }}{% else %}-{% endif %}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Gitweb'|trans }}:</th>
+                <td>{% if repository.gitweb %}<span class="badge badge-success">yes</span>{% else %}<span class="label">no</span>{% endif %}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Daemon'|trans }}:</th>
+                <td>{% if repository.daemon %}<span class="badge badge-success">yes</span>{% else %}<span class="label">no</span>{% endif %}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Clone Command'|trans }}:</th>
+                <td>git clone {{ gitosis_sshUser }}@{{ gitosis_host }}:{{ repository.name }}.git</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="well">
+        <h4>{{ 'Access'|trans }}</h4>
+        {% if groups_write or groups_readonly or users_write or users_readonly %}
+        <ul class="nav nav-list">
+            {% if groups_write %}
+                <li class="nav-header">{{ 'Writable Groups'|trans }}</li>
+                {% for group in groups_write %}
+                    <li><a href="{{ url('group_view', { group: group.name }) }}"><i class="icon-list-alt"></i> {{ group.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+
+            {% if groups_readonly %}
+                <li class="nav-header">{{ 'Readonly Groups'|trans }}</li>
+                {% for group in groups_readonly %}
+                <li><a href="{{ url('group_view', { group: group.name }) }}"><i class="icon-list-alt"></i> {{ group.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+
+            {% if users_write %}
+                <li class="nav-header">{{ 'Write Users'|trans }}</li>
+                {% for user in users_write %}
+                <li><a href="{{ url('user_view', {user:user}) }}"><i class="icon-user"></i> {{ format_macros.username(user) }}</a></li>
+                {% endfor %}
+            {% endif %}
+
+            {% if users_readonly %}
+                <li class="nav-header">{{ 'Readonly Users'|trans }}</li>
+                {% for user in users_readonly %}
+                <li><a href="#"><i class="icon-user"></i> {{ format_macros.username(user) }}</a></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+        {% else %}
+            <span class="label label-warning">{{ 'No access rules defined'|trans }}</span>
+        {% endif %}
+    </div>
+
+    <!-- Delete repository dialog -->
+    <div id="delete_repository_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteRepositoryDialog" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="deleteRepositoryDialog">{{ 'Delete Repository'|trans }}</h3>
+        </div>
+        <div class="modal-body">
+            <p>Do you really want to delete repository: <strong>{{ repository.name }}</strong>?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">{{ 'Close'|trans }}</button>
+            <a href="{{ url('repository_delete', { repo: repository.name}) }}" class="btn btn-danger">{{ 'Delete'|trans }}</a>
+        </div>
+    </div>
+
+{% endblock %}

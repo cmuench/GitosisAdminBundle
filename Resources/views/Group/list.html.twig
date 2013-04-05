@@ -1,0 +1,33 @@
+{% extends "N98GitosisAdminBundle:Layout:page.html.twig" %}
+
+{% block content %}
+    <h2>{{ 'Groups'|trans }}</h2>
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <a class="btn btn-toolbar" href="{{ url('group_create') }}">
+                <i class="icon-plus-sign"></i>
+                {{ 'Create Group'|trans }}
+            </a>
+        </div>
+    </div>
+
+    {% include "filter_form.html.twig" %}
+
+    {% if groups %}
+    <ul id="group_list" class="nav nav-tabs nav-stacked filter-list">
+    {% for group in groups %}
+        <li>
+            <a href="{{ url('group_view', { group: group.name }) }}"><i class="icon-black icon-list-alt"></i> {{ group.name }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+    {% else %}
+        <span class="label label-warning">{{ 'No users are currently assigned'|trans }}</span>
+    {% endif %}
+
+{% endblock %}
+
+{% block before_body %}
+    {% include "filter_form_js.html.twig" %}
+{% endblock %}

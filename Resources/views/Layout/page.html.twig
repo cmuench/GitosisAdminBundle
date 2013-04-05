@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ asset('bundles/n98gitosisadmin/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/n98gitosisadmin/bootstrap/css/bootstrap-responsive.css') }}" rel="stylesheet">
+    <title>Gitosis Admin</title>
+</head>
+<body>
+
+{% include "N98GitosisAdminBundle:Layout:navigation.html.twig" %}
+
+{% block flash %}
+    {% for type, flashMessages in app.session.flashbag.all() %}
+        {% for flash in flashMessages %}
+            <div class="alert alert-block alert-{{ type }}">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <p>{{ flash }}</p>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock flash %}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{ asset('bundles/n98gitosisadmin/bootstrap/js/bootstrap.min.js') }}"></script>
+
+{% block before_body %}
+{% endblock %}
+
+</body>
+</html>
